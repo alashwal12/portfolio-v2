@@ -12,8 +12,13 @@ export async function createProject(formData: FormData) {
   const github = formData.get("github") as string;
   const techStack = formData.get("techStack") as string;
   
-  const imageFile = formData.get("image") as File;
-  const imageUrl = await uploadFile(imageFile);
+  const imageField = formData.get("image");
+  let imageUrl: string | null = null;
+  if (typeof imageField === "string" && imageField.startsWith("data:")) {
+    imageUrl = imageField;
+  } else if (imageField instanceof File && imageField.size > 0) {
+    imageUrl = await uploadFile(imageField);
+  }
 
   await db.project.create({
     data: {
@@ -46,11 +51,15 @@ export async function updateProject(id: string, formData: FormData) {
     techStack,
   };
 
-  const imageFile = formData.get("image") as File;
-  if (imageFile && imageFile.size > 0) {
+  const imageField = formData.get("image");
+  if (typeof imageField === "string" && imageField.startsWith("data:")) {
     const existing = await db.project.findUnique({ where: { id } });
     await deleteFile(existing?.image || null);
-    dataToUpdate.image = await uploadFile(imageFile);
+    dataToUpdate.image = imageField;
+  } else if (imageField instanceof File && imageField.size > 0) {
+    const existing = await db.project.findUnique({ where: { id } });
+    await deleteFile(existing?.image || null);
+    dataToUpdate.image = await uploadFile(imageField);
   }
 
   await db.project.update({

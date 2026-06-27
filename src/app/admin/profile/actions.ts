@@ -31,9 +31,13 @@ export async function updateProfile(formData: FormData) {
   // Let's get existing profile first to delete old files if replaced
   const existing = await db.profile.findFirst();
 
-  if (imageFile && imageFile.size > 0) {
+  const imageField = formData.get("image");
+  if (typeof imageField === "string" && imageField.startsWith("data:")) {
     if (existing?.image) await deleteFile(existing.image);
-    dataToUpdate.image = await uploadFile(imageFile);
+    dataToUpdate.image = imageField;
+  } else if (imageField instanceof File && imageField.size > 0) {
+    if (existing?.image) await deleteFile(existing.image);
+    dataToUpdate.image = await uploadFile(imageField);
   }
 
   if (resumeFile && resumeFile.size > 0) {

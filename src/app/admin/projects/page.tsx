@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { createProject, deleteProject } from "./actions";
 import { Trash2, Pencil } from "lucide-react";
 import Link from "next/link";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 export default async function ProjectsPage() {
   const projects = await db.project.findMany({
@@ -39,7 +40,7 @@ export default async function ProjectsPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Project Image</label>
-                <input type="file" name="image" className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                <ImageUploader name="image" />
               </div>
               <button
                 type="submit"

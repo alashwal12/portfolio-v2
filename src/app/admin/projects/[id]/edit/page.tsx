@@ -3,6 +3,7 @@ import { updateProject } from "../../actions";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 export default async function EditProjectPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -54,12 +55,7 @@ export default async function EditProjectPage(props: { params: Promise<{ id: str
 
             <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Update Project Image (leave empty to keep current)</label>
-              {project.image && (
-                <div className="mb-3">
-                  <img src={project.image} alt={project.title} className="w-32 h-auto rounded-lg border border-gray-200 dark:border-gray-700" />
-                </div>
-              )}
-              <input type="file" name="image" accept="image/*" className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+              <ImageUploader name="image" defaultImage={project.image && project.image.startsWith("data:") ? `/api/image?type=project&id=${project.id}` : project.image || undefined} />
             </div>
           </div>
 

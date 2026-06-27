@@ -10,8 +10,13 @@ export async function createCertification(formData: FormData) {
   const date = formData.get("date") as string;
   const link = formData.get("link") as string;
   
-  const imageFile = formData.get("image") as File;
-  const imageUrl = await uploadFile(imageFile);
+  const imageField = formData.get("image");
+  let imageUrl: string | null = null;
+  if (typeof imageField === "string" && imageField.startsWith("data:")) {
+    imageUrl = imageField;
+  } else if (imageField instanceof File && imageField.size > 0) {
+    imageUrl = await uploadFile(imageField);
+  }
 
   await db.certification.create({
     data: {
