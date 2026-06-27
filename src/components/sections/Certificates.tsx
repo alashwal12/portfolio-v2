@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Award, ExternalLink, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const defaultCertificates = [
     // Prioritized Certificates
@@ -71,6 +71,20 @@ const defaultCertificates = [
 
 export function Certificates({ certificates: dbCertificates }: { certificates?: any[] }) {
     const [showAll, setShowAll] = useState(false);
+    const [hoveredImage, setHoveredImage] = useState<string | null>(null);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [windowWidth, setWindowWidth] = useState(0);
+    
+    useEffect(() => {
+        setWindowWidth(window.innerWidth);
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        setMousePos({ x: e.clientX, y: e.clientY });
+    };
     
     const currentCertificates = dbCertificates && dbCertificates.length > 0
       ? dbCertificates.map(c => ({
@@ -86,7 +100,34 @@ export function Certificates({ certificates: dbCertificates }: { certificates?: 
     const displayedCertificates = showAll ? currentCertificates : currentCertificates.slice(0, 3);
 
     return (
-        <section id="certificates" className="py-20 bg-background/50 relative">
+        <section id="certificates" className="py-20 bg-background/50 relative" onMouseMove={handleMouseMove}>
+            
+            {/* Floating Image Tooltip */}
+            <AnimatePresence>
+                {hoveredImage && (
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed pointer-events-none z-[9999] hidden lg:block"
+                        style={{
+                            left: mousePos.x,
+                            top: mousePos.y,
+                            transform: mousePos.x > windowWidth / 2 
+                                 ? "translate(-105%, 20px)" 
+                                 : "translate(20px, 20px)"
+                        }}
+                    >
+                        <div className="bg-white border-2 border-primary p-2 rounded-xl shadow-2xl w-[500px]">
+                            <div className="relative w-full aspect-[4/3]">
+                                <Image src={hoveredImage} alt="Preview" fill className="object-contain rounded-lg" />
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <div className="container mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -111,16 +152,18 @@ export function Certificates({ certificates: dbCertificates }: { certificates?: 
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             viewport={{ once: true }}
-                            className="bg-card border border-[#01bf4e] shadow-[0_0_10px_rgba(1,191,78,0.2)] rounded-xl overflow-hidden hover:shadow-[0_0_20px_rgba(1,191,78,0.4)] transition-shadow flex flex-col h-full"
+                            onMouseEnter={() => setHoveredImage(cert.image)}
+                            onMouseLeave={() => setHoveredImage(null)}
+                            className="bg-card border border-[#01bf4e] shadow-[0_0_10px_rgba(1,191,78,0.2)] rounded-xl overflow-hidden hover:shadow-[0_0_20px_rgba(1,191,78,0.4)] transition-shadow flex flex-col h-full cursor-crosshair"
                         >
                             {/* Top Image area - White background for Cert logo visibility */}
-                            <div className="relative h-48 w-full bg-white p-4 flex items-center justify-center border-b border-[#01bf4e]/50">
+                            <div className="relative h-48 w-full bg-white p-4 flex items-center justify-center border-b border-[#01bf4e]/50 overflow-hidden group">
                                 <div className="relative w-full h-full">
                                     <Image
                                         src={cert.image}
                                         alt={cert.title}
                                         fill
-                                        className="object-contain" // Contain to show full cert/logo
+                                        className="object-contain group-hover:scale-110 transition-transform duration-500" // Contain to show full cert/logo
                                     />
                                 </div>
                             </div>
@@ -140,7 +183,8 @@ export function Certificates({ certificates: dbCertificates }: { certificates?: 
                                     <Link
                                         href={cert.link}
                                         target="_blank"
-                                        className="text-sm font-bold text-blue-500 hover:text-blue-400 inline-flex items-center gap-1"
+                                        className="text-sm font-bold text-blue-500 hover:text-blue-400 inline-flex items-center gap-1 relative z-10"
+                                        onClick={(e) => e.stopPropagation()}
                                     >
                                         View Certificate <ArrowRight className="w-4 h-4" />
                                     </Link>
