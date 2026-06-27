@@ -73,13 +73,13 @@ export function Navbar({ resumeUrl }: { resumeUrl?: string | null }) {
                             <Moon className="h-5 w-5" />
                         )}
                     </button>
-                    <Link
+                    <a
                         href={resumeUrl || "/resume.pdf"}
-                        target="_blank"
+                        download="Abdulmajeed_Resume.pdf"
                         className="px-5 py-2.5 text-base font-semibold text-background bg-amber-500 rounded-full hover:bg-amber-400 transition-colors shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_20px_rgba(245,158,11,0.5)]"
                     >
                         Resume
-                    </Link>
+                    </a>
                 </nav>
 
                 {/* Mobile Toggle */}
@@ -119,14 +119,14 @@ export function Navbar({ resumeUrl }: { resumeUrl?: string | null }) {
                                 {resolvedTheme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                                 {resolvedTheme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
                             </button>
-                            <Link
+                            <a
                                 href={resumeUrl || "/resume.pdf"}
-                                target="_blank"
+                                download="Abdulmajeed_Resume.pdf"
                                 onClick={() => setIsOpen(false)}
                                 className="inline-block w-full text-center px-5 py-3 text-background bg-amber-500 rounded-lg font-bold hover:bg-amber-400 transition-colors shadow-[0_0_15px_rgba(245,158,11,0.3)]"
                             >
                                 Download Resume
-                            </Link>
+                            </a>
                         </nav>
                     </motion.div>
                 )}
