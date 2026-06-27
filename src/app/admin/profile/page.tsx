@@ -57,7 +57,7 @@ export default async function ProfilePage() {
             </div>
 
             <div className="col-span-2 md:col-span-1">
-              <ImageUploader name="image" defaultImage={profile?.image ? "/api/profile-image" : undefined} isProfile={true} />
+              <ImageUploader name="image" defaultImage={profile?.image ? `/api/profile-image?t=${Date.now()}` : undefined} isProfile={true} />
             </div>
 
             <div className="col-span-2 md:col-span-1">

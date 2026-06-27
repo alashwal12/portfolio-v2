@@ -55,7 +55,7 @@ export default async function EditProjectPage(props: { params: Promise<{ id: str
 
             <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Update Project Image (leave empty to keep current)</label>
-              <ImageUploader name="image" defaultImage={project.image && project.image.startsWith("data:") ? `/api/image?type=project&id=${project.id}` : project.image || undefined} />
+              <ImageUploader name="image" defaultImage={project.image && project.image.startsWith("data:") ? `/api/image?type=project&id=${project.id}&t=${Date.now()}` : project.image || undefined} />
             </div>
           </div>
 

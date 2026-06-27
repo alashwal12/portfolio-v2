@@ -16,20 +16,21 @@ export default async function Home() {
   ]);
 
   // Strip massive Base64 strings before passing to Client Components to prevent crashes
+  const timestamp = Date.now();
   const safeProfile = profile ? {
     ...profile,
-    image: profile.image ? "/api/profile-image" : null,
+    image: profile.image ? `/api/profile-image?t=${timestamp}` : null,
     resumeUrl: null,
   } : null;
 
   const safeProjects = projects.map(p => ({
     ...p,
-    image: p.image && p.image.startsWith("data:") ? `/api/image?type=project&id=${p.id}` : p.image
+    image: p.image ? `/api/image?type=project&id=${p.id}&t=${timestamp}` : null,
   }));
 
   const safeCertificates = certificates.map(c => ({
     ...c,
-    image: c.image && c.image.startsWith("data:") ? `/api/image?type=certification&id=${c.id}` : c.image
+    image: c.image ? `/api/image?type=certification&id=${c.id}&t=${timestamp}` : null,
   }));
 
   return (

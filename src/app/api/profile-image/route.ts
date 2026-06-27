@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const profile = await db.profile.findFirst();
@@ -32,7 +34,7 @@ export async function GET() {
     return new NextResponse(buffer, {
       headers: {
         "Content-Type": mimeType,
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "Cache-Control": "no-store, max-age=0",
       },
     });
   } catch (error) {

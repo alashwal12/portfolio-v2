@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -43,7 +45,7 @@ export async function GET(request: Request) {
     return new NextResponse(buffer, {
       headers: {
         "Content-Type": mimeType,
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "Cache-Control": "no-store, max-age=0",
       },
     });
   } catch (error) {
