@@ -76,6 +76,14 @@ export function Projects({ projects: dbProjects }: { projects?: any[] }) {
         setMousePos({ x: e.clientX, y: e.clientY });
     };
     
+    const formatUrl = (url: string) => {
+        if (!url || url === "#" || url.startsWith("/")) return url;
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            return `https://${url}`;
+        }
+        return url;
+    };
+
     // Use dbProjects if they exist, otherwise fallback to default
     const currentProjects = dbProjects && dbProjects.length > 0 
       ? dbProjects.map(p => ({
@@ -83,7 +91,7 @@ export function Projects({ projects: dbProjects }: { projects?: any[] }) {
           description: p.description,
           tags: p.techStack ? p.techStack.split(",").map((t: string) => t.trim()) : [],
           image: p.image || "/images/placeholder.png",
-          link: p.link || p.github || "#"
+          link: formatUrl(p.link || p.github || "#")
         }))
       : defaultProjects;
 

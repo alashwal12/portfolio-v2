@@ -86,13 +86,21 @@ export function Certificates({ certificates: dbCertificates }: { certificates?: 
         setMousePos({ x: e.clientX, y: e.clientY });
     };
     
+    const formatUrl = (url: string) => {
+        if (!url || url === "#" || url.startsWith("/")) return url;
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            return `https://${url}`;
+        }
+        return url;
+    };
+
     const currentCertificates = dbCertificates && dbCertificates.length > 0
       ? dbCertificates.map(c => ({
           title: c.title,
           issuer: c.issuer,
           date: c.date,
           image: c.image || "/images/placeholder.png",
-          link: c.link || "#",
+          link: formatUrl(c.link || "#"),
           tags: ["Certification"]
         }))
       : defaultCertificates;
