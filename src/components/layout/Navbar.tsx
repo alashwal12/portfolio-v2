@@ -16,7 +16,7 @@ const navLinks = [
     { name: "Contact", href: "#contact" },
 ];
 
-export function Navbar({ resumeUrl }: { resumeUrl?: string | null }) {
+export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const { theme, setTheme, resolvedTheme } = useTheme();
