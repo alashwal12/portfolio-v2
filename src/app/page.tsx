@@ -15,14 +15,21 @@ export default async function Home() {
     db.certification.findMany({ orderBy: { createdAt: "desc" } })
   ]);
 
+  // Strip massive Base64 strings before passing to Client Components to prevent crashes
+  const safeProfile = profile ? {
+    ...profile,
+    image: profile.image ? "/api/profile-image" : null,
+    resumeUrl: null,
+  } : null;
+
   return (
     <main className="flex min-h-screen flex-col">
-      <Hero profile={profile} />
-      <About profile={profile} />
+      <Hero profile={safeProfile} />
+      <About profile={safeProfile} />
       <Skills skills={skills} />
       <Projects projects={projects} />
       <Certificates certificates={certificates} />
-      <Contact profile={profile} />
+      <Contact profile={safeProfile} />
       <Footer />
     </main>
   );
