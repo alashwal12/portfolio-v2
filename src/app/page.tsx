@@ -15,14 +15,31 @@ export default async function Home() {
     db.certification.findMany({ orderBy: { createdAt: "desc" } })
   ]);
 
+  // Strip massive Base64 strings before passing to Client Components to prevent crashes
+  const safeProfile = profile ? {
+    ...profile,
+    image: profile.image ? "/api/profile-image" : null,
+    resumeUrl: null,
+  } : null;
+
+  const safeProjects = projects.map(p => ({
+    ...p,
+    image: p.image && p.image.startsWith("data:") ? `/api/image?type=project&id=${p.id}` : p.image
+  }));
+
+  const safeCertificates = certificates.map(c => ({
+    ...c,
+    image: c.image && c.image.startsWith("data:") ? `/api/image?type=certification&id=${c.id}` : c.image
+  }));
+
   return (
     <main className="flex min-h-screen flex-col">
-      <Hero profile={profile} />
-      <About profile={profile} />
+      <Hero profile={safeProfile} />
+      <About profile={safeProfile} />
       <Skills skills={skills} />
-      <Projects projects={projects} />
-      <Certificates certificates={certificates} />
-      <Contact profile={profile} />
+      <Projects projects={safeProjects} />
+      <Certificates certificates={safeCertificates} />
+      <Contact profile={safeProfile} />
       <Footer />
     </main>
   );

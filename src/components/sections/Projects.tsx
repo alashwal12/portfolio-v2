@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Placeholder Data (Will be replaced with real content later)
 const defaultProjects = [
@@ -61,6 +61,20 @@ const defaultProjects = [
 
 export function Projects({ projects: dbProjects }: { projects?: any[] }) {
     const [showAll, setShowAll] = useState(false);
+    const [hoveredImage, setHoveredImage] = useState<string | null>(null);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [windowWidth, setWindowWidth] = useState(0);
+    
+    useEffect(() => {
+        setWindowWidth(window.innerWidth);
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        setMousePos({ x: e.clientX, y: e.clientY });
+    };
     
     // Use dbProjects if they exist, otherwise fallback to default
     const currentProjects = dbProjects && dbProjects.length > 0 
@@ -76,7 +90,34 @@ export function Projects({ projects: dbProjects }: { projects?: any[] }) {
     const displayedProjects = showAll ? currentProjects : currentProjects.slice(0, 3);
 
     return (
-        <section id="projects" className="py-24 bg-background relative">
+        <section id="projects" className="py-24 bg-background relative" onMouseMove={handleMouseMove}>
+            
+            {/* Floating Image Tooltip */}
+            <AnimatePresence>
+                {hoveredImage && (
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed pointer-events-none z-[9999] hidden lg:block"
+                        style={{
+                            left: mousePos.x,
+                            top: mousePos.y,
+                            transform: mousePos.x > windowWidth / 2 
+                                 ? "translate(-105%, 20px)" 
+                                 : "translate(20px, 20px)"
+                        }}
+                    >
+                        <div className="bg-card border-2 border-primary p-2 rounded-xl shadow-2xl w-[500px]">
+                            <div className="relative w-full aspect-video">
+                                <Image src={hoveredImage} alt="Preview" fill className="object-contain rounded-lg" />
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <div className="container mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -110,15 +151,17 @@ export function Projects({ projects: dbProjects }: { projects?: any[] }) {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             viewport={{ once: true }}
-                            className="bg-card border border-[#01bf4e] shadow-[0_0_10px_rgba(1,191,78,0.2)] rounded-xl overflow-hidden hover:shadow-[0_0_20px_rgba(1,191,78,0.4)] transition-shadow flex flex-col h-full"
+                            onMouseEnter={() => setHoveredImage(project.image)}
+                            onMouseLeave={() => setHoveredImage(null)}
+                            className="bg-card border border-[#01bf4e] shadow-[0_0_10px_rgba(1,191,78,0.2)] rounded-xl overflow-hidden hover:shadow-[0_0_20px_rgba(1,191,78,0.4)] transition-shadow flex flex-col h-full cursor-crosshair"
                         >
                             {/* Top Image */}
-                            <div className="relative h-48 w-full bg-muted">
+                            <div className="relative h-48 w-full bg-muted overflow-hidden group">
                                 <Image
                                     src={project.image}
                                     alt={project.title}
                                     fill
-                                    className="object-cover"
+                                    className="object-cover group-hover:scale-110 transition-transform duration-500"
                                 />
                             </div>
 
@@ -142,7 +185,8 @@ export function Projects({ projects: dbProjects }: { projects?: any[] }) {
                                     <Link
                                         href={project.link}
                                         target="_blank"
-                                        className="inline-flex items-center gap-2 text-sm text-foreground font-semibold hover:text-primary transition-colors"
+                                        className="inline-flex items-center gap-2 text-sm text-foreground font-semibold hover:text-primary transition-colors relative z-10"
+                                        onClick={(e) => e.stopPropagation()}
                                     >
                                         <ExternalLink className="w-4 h-4" /> View Project
                                     </Link>
