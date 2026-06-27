@@ -69,8 +69,8 @@ export default async function ProfilePage() {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Resume (PDF)</label>
               {profile?.resumeUrl && (
                 <div className="mb-3">
-                  <a href={profile.resumeUrl} download="Resume.pdf" className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium">
-                    Download Current Resume
+                  <a href="/api/resume" target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium">
+                    View Current Resume
                   </a>
                 </div>
               )}
