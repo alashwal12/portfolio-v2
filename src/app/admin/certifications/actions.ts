@@ -43,3 +43,39 @@ export async function deleteCertification(id: string) {
   revalidatePath("/");
   revalidatePath("/admin/certifications");
 }
+
+export async function moveCertificateUp(id: string) {
+  const current = await db.certification.findUnique({ where: { id } });
+  if (!current) return;
+
+  const previous = await db.certification.findFirst({
+    where: { order: { lt: current.order } },
+    orderBy: { order: "desc" },
+  });
+
+  if (previous) {
+    await db.certification.update({ where: { id: current.id }, data: { order: previous.order } });
+    await db.certification.update({ where: { id: previous.id }, data: { order: current.order } });
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin/certifications");
+}
+
+export async function moveCertificateDown(id: string) {
+  const current = await db.certification.findUnique({ where: { id } });
+  if (!current) return;
+
+  const next = await db.certification.findFirst({
+    where: { order: { gt: current.order } },
+    orderBy: { order: "asc" },
+  });
+
+  if (next) {
+    await db.certification.update({ where: { id: current.id }, data: { order: next.order } });
+    await db.certification.update({ where: { id: next.id }, data: { order: current.order } });
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin/certifications");
+}

@@ -83,3 +83,39 @@ export async function deleteProject(id: string) {
   revalidatePath("/");
   revalidatePath("/admin/projects");
 }
+
+export async function moveProjectUp(id: string) {
+  const current = await db.project.findUnique({ where: { id } });
+  if (!current) return;
+
+  const previous = await db.project.findFirst({
+    where: { order: { lt: current.order } },
+    orderBy: { order: "desc" },
+  });
+
+  if (previous) {
+    await db.project.update({ where: { id: current.id }, data: { order: previous.order } });
+    await db.project.update({ where: { id: previous.id }, data: { order: current.order } });
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin/projects");
+}
+
+export async function moveProjectDown(id: string) {
+  const current = await db.project.findUnique({ where: { id } });
+  if (!current) return;
+
+  const next = await db.project.findFirst({
+    where: { order: { gt: current.order } },
+    orderBy: { order: "asc" },
+  });
+
+  if (next) {
+    await db.project.update({ where: { id: current.id }, data: { order: next.order } });
+    await db.project.update({ where: { id: next.id }, data: { order: current.order } });
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin/projects");
+}

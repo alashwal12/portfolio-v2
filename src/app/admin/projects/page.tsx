@@ -1,12 +1,12 @@
 import { db } from "@/lib/db";
-import { createProject, deleteProject } from "./actions";
-import { Trash2, Pencil } from "lucide-react";
+import { createProject, deleteProject, moveProjectUp, moveProjectDown } from "./actions";
+import { Trash2, Pencil, ArrowUp, ArrowDown } from "lucide-react";
 import Link from "next/link";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 
 export default async function ProjectsPage() {
   const projects = await db.project.findMany({
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ order: "asc" }, { createdAt: "desc" }],
   });
 
   return (
@@ -68,7 +68,7 @@ export default async function ProjectsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {projects.map((project) => (
+                  {projects.map((project, index) => (
                     <tr key={project.id} className="border-b border-gray-50 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                       <td className="p-4 text-gray-900 dark:text-gray-100 font-medium">
                         {project.title}
@@ -76,10 +76,31 @@ export default async function ProjectsPage() {
                       <td className="p-4 text-gray-500 dark:text-gray-400 text-sm">
                         {project.techStack}
                       </td>
-                      <td className="p-4 text-right space-x-2">
+                      <td className="p-4 text-right space-x-1 whitespace-nowrap">
+                        <form action={moveProjectUp.bind(null, project.id)} className="inline-block">
+                          <button
+                            type="submit"
+                            disabled={index === 0}
+                            className="p-2 text-gray-400 hover:text-green-600 dark:hover:text-green-400 disabled:opacity-30 disabled:hover:text-gray-400 transition-colors"
+                            title="Move Up"
+                          >
+                            <ArrowUp size={18} />
+                          </button>
+                        </form>
+                        <form action={moveProjectDown.bind(null, project.id)} className="inline-block">
+                          <button
+                            type="submit"
+                            disabled={index === projects.length - 1}
+                            className="p-2 text-gray-400 hover:text-green-600 dark:hover:text-green-400 disabled:opacity-30 disabled:hover:text-gray-400 transition-colors"
+                            title="Move Down"
+                          >
+                            <ArrowDown size={18} />
+                          </button>
+                        </form>
                         <Link
                           href={`/admin/projects/${project.id}/edit`}
                           className="inline-flex p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                          title="Edit"
                         >
                           <Pencil size={18} />
                         </Link>
@@ -87,6 +108,7 @@ export default async function ProjectsPage() {
                           <button
                             type="submit"
                             className="p-2 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                            title="Delete"
                           >
                             <Trash2 size={18} />
                           </button>

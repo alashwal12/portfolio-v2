@@ -10,9 +10,9 @@ import { db } from "@/lib/db";
 export default async function Home() {
   const [profile, projects, skills, certificates] = await Promise.all([
     db.profile.findFirst(),
-    db.project.findMany({ orderBy: { createdAt: "desc" } }),
-    db.skill.findMany({ orderBy: { category: "asc" } }),
-    db.certification.findMany({ orderBy: { createdAt: "desc" } })
+    db.project.findMany({ orderBy: [{ order: "asc" }, { createdAt: "desc" }] }),
+    db.skill.findMany({ orderBy: [{ order: "asc" }, { category: "asc" }] }),
+    db.certification.findMany({ orderBy: [{ order: "asc" }, { createdAt: "desc" }] })
   ]);
 
   // Strip massive Base64 strings before passing to Client Components to prevent crashes

@@ -1,11 +1,11 @@
 import { db } from "@/lib/db";
-import { createCertification, deleteCertification } from "./actions";
-import { Trash2 } from "lucide-react";
+import { createCertification, deleteCertification, moveCertificateUp, moveCertificateDown } from "./actions";
+import { Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 
 export default async function CertificationsPage() {
   const certifications = await db.certification.findMany({
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ order: "asc" }, { createdAt: "desc" }],
   });
 
   return (
@@ -63,7 +63,7 @@ export default async function CertificationsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {certifications.map((cert) => (
+                  {certifications.map((cert, index) => (
                     <tr key={cert.id} className="border-b border-gray-50 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                       <td className="p-4">
                         <div className="font-medium text-gray-900 dark:text-gray-100">{cert.title}</div>
@@ -72,11 +72,32 @@ export default async function CertificationsPage() {
                       <td className="p-4 text-gray-500 dark:text-gray-400 text-sm">
                         {cert.date || "-"}
                       </td>
-                      <td className="p-4 text-right">
+                      <td className="p-4 text-right space-x-1 whitespace-nowrap">
+                        <form action={moveCertificateUp.bind(null, cert.id)} className="inline-block">
+                          <button
+                            type="submit"
+                            disabled={index === 0}
+                            className="p-2 text-gray-400 hover:text-green-600 dark:hover:text-green-400 disabled:opacity-30 disabled:hover:text-gray-400 transition-colors"
+                            title="Move Up"
+                          >
+                            <ArrowUp size={18} />
+                          </button>
+                        </form>
+                        <form action={moveCertificateDown.bind(null, cert.id)} className="inline-block">
+                          <button
+                            type="submit"
+                            disabled={index === certifications.length - 1}
+                            className="p-2 text-gray-400 hover:text-green-600 dark:hover:text-green-400 disabled:opacity-30 disabled:hover:text-gray-400 transition-colors"
+                            title="Move Down"
+                          >
+                            <ArrowDown size={18} />
+                          </button>
+                        </form>
                         <form action={deleteCertification.bind(null, cert.id)} className="inline-block">
                           <button
                             type="submit"
                             className="p-2 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                            title="Delete"
                           >
                             <Trash2 size={18} />
                           </button>
