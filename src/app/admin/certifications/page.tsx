@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
-import { createCertification, deleteCertification, moveCertificateUp, moveCertificateDown } from "./actions";
-import { Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { createCertification } from "./actions";
 import { ImageUploader } from "@/components/admin/ImageUploader";
+import { DraggableCertificationList } from "@/components/admin/DraggableCertificationList";
 
 export default async function CertificationsPage() {
   const certifications = await db.certification.findMany({
@@ -49,65 +49,7 @@ export default async function CertificationsPage() {
 
         <div className="lg:col-span-2">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-            {certifications.length === 0 ? (
-              <div className="p-8 text-center text-gray-500 dark:text-gray-400">
-                No certifications added yet.
-              </div>
-            ) : (
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-700">
-                    <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Title & Issuer</th>
-                    <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Date</th>
-                    <th className="p-4 font-medium text-gray-500 dark:text-gray-400 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {certifications.map((cert, index) => (
-                    <tr key={cert.id} className="border-b border-gray-50 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                      <td className="p-4">
-                        <div className="font-medium text-gray-900 dark:text-gray-100">{cert.title}</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">{cert.issuer}</div>
-                      </td>
-                      <td className="p-4 text-gray-500 dark:text-gray-400 text-sm">
-                        {cert.date || "-"}
-                      </td>
-                      <td className="p-4 text-right space-x-1 whitespace-nowrap">
-                        <form action={moveCertificateUp.bind(null, cert.id)} className="inline-block">
-                          <button
-                            type="submit"
-                            disabled={index === 0}
-                            className="p-2 text-gray-400 hover:text-green-600 dark:hover:text-green-400 disabled:opacity-30 disabled:hover:text-gray-400 transition-colors"
-                            title="Move Up"
-                          >
-                            <ArrowUp size={18} />
-                          </button>
-                        </form>
-                        <form action={moveCertificateDown.bind(null, cert.id)} className="inline-block">
-                          <button
-                            type="submit"
-                            disabled={index === certifications.length - 1}
-                            className="p-2 text-gray-400 hover:text-green-600 dark:hover:text-green-400 disabled:opacity-30 disabled:hover:text-gray-400 transition-colors"
-                            title="Move Down"
-                          >
-                            <ArrowDown size={18} />
-                          </button>
-                        </form>
-                        <form action={deleteCertification.bind(null, cert.id)} className="inline-block">
-                          <button
-                            type="submit"
-                            className="p-2 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 size={18} />
-                          </button>
-                        </form>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+            <DraggableCertificationList initialCertificates={certifications} />
           </div>
         </div>
       </div>

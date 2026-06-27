@@ -79,3 +79,17 @@ export async function moveCertificateDown(id: string) {
   revalidatePath("/");
   revalidatePath("/admin/certifications");
 }
+
+export async function updateCertificationsOrder(orderedIds: string[]) {
+  await Promise.all(
+    orderedIds.map((id, index) =>
+      db.certification.update({
+        where: { id },
+        data: { order: index },
+      })
+    )
+  );
+
+  revalidatePath("/");
+  revalidatePath("/admin/certifications");
+}

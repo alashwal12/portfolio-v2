@@ -119,3 +119,18 @@ export async function moveProjectDown(id: string) {
   revalidatePath("/");
   revalidatePath("/admin/projects");
 }
+
+export async function updateProjectsOrder(orderedIds: string[]) {
+  // Execute updates sequentially or Promise.all since Prisma doesn't have a bulk update for multiple different values easily without raw SQL.
+  await Promise.all(
+    orderedIds.map((id, index) =>
+      db.project.update({
+        where: { id },
+        data: { order: index },
+      })
+    )
+  );
+
+  revalidatePath("/");
+  revalidatePath("/admin/projects");
+}
