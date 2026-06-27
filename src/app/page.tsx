@@ -25,12 +25,12 @@ export default async function Home() {
 
   const safeProjects = projects.map(p => ({
     ...p,
-    image: p.image ? `/api/image?type=project&id=${p.id}&t=${timestamp}` : null,
+    image: p.image && p.image.startsWith("data:") ? `/api/image?type=project&id=${p.id}&t=${timestamp}` : p.image,
   }));
 
   const safeCertificates = certificates.map(c => ({
     ...c,
-    image: c.image ? `/api/image?type=certification&id=${c.id}&t=${timestamp}` : null,
+    image: c.image && c.image.startsWith("data:") ? `/api/image?type=certification&id=${c.id}&t=${timestamp}` : c.image,
   }));
 
   return (

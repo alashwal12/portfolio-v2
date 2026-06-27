@@ -25,7 +25,15 @@ export async function GET(request: Request) {
       return new NextResponse("Invalid type", { status: 400 });
     }
 
-    if (!base64Image || !base64Image.startsWith("data:")) {
+    if (!base64Image) {
+      return new NextResponse("Image not found", { status: 404 });
+    }
+
+    if (base64Image.startsWith("/")) {
+      return NextResponse.redirect(new URL(base64Image, request.url));
+    }
+
+    if (!base64Image.startsWith("data:")) {
       return new NextResponse("Image not found or not base64", { status: 404 });
     }
 

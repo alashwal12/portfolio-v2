@@ -3,12 +3,16 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const profile = await db.profile.findFirst();
 
     if (!profile || !profile.image) {
       return new NextResponse("Image not found", { status: 404 });
+    }
+
+    if (profile.image.startsWith("/")) {
+      return NextResponse.redirect(new URL(profile.image, request.url));
     }
 
     // The image is a base64 data URI: data:image/jpeg;base64,/9j/4AAQ...
