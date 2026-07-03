@@ -109,16 +109,6 @@ export function Hero({ profile }: { profile?: any }) {
                             <Mail className="h-6 w-6" />
                         </Link>
                     </div>
-
-                    {/* Tool Logos Row */}
-                    <div className="flex items-center gap-5 pt-8 flex-wrap">
-                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/powerbi.svg" alt="Power BI" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(76%) sepia(55%) saturate(3786%) hue-rotate(345deg) brightness(101%) contrast(98%)' }} title="Power BI" />
-                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tableau.svg" alt="Tableau" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(47%) sepia(86%) saturate(1914%) hue-rotate(349deg) brightness(97%) contrast(92%)' }} title="Tableau" />
-                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/python.svg" alt="Python" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(37%) sepia(48%) saturate(1472%) hue-rotate(185deg) brightness(97%) contrast(89%)' }} title="Python" />
-                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/mysql.svg" alt="SQL" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(41%) sepia(50%) saturate(1148%) hue-rotate(172deg) brightness(93%) contrast(87%)' }} title="SQL" />
-                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/microsoftexcel.svg" alt="Excel" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(33%) sepia(90%) saturate(1210%) hue-rotate(120deg) brightness(94%) contrast(95%)' }} title="Excel" />
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg" alt="Figma" className="w-8 h-8 hover:scale-110 transition-transform" title="Figma" />
-                    </div>
                 </motion.div>
 
                 {/* Right: Image Blob */}
@@ -160,6 +150,22 @@ export function Hero({ profile }: { profile?: any }) {
                     </div>
                 </motion.div>
             </div>
+
+            {/* Tool Logos Row - Bottom Middle of Hero */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center justify-center gap-6 bg-card/80 backdrop-blur-md px-8 py-4 rounded-full border border-border shadow-xl z-10"
+            >
+                {/* Use jsdelivr simple-icons for reliability */}
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/powerbi.svg" alt="Power BI" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(76%) sepia(55%) saturate(3786%) hue-rotate(345deg) brightness(101%) contrast(98%)' }} title="Power BI" />
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tableau.svg" alt="Tableau" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(47%) sepia(86%) saturate(1914%) hue-rotate(349deg) brightness(97%) contrast(92%)' }} title="Tableau" />
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/python.svg" alt="Python" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(37%) sepia(48%) saturate(1472%) hue-rotate(185deg) brightness(97%) contrast(89%)' }} title="Python" />
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/mysql.svg" alt="SQL" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(41%) sepia(50%) saturate(1148%) hue-rotate(172deg) brightness(93%) contrast(87%)' }} title="SQL" />
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/microsoftexcel.svg" alt="Excel" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(33%) sepia(90%) saturate(1210%) hue-rotate(120deg) brightness(94%) contrast(95%)' }} title="Excel" />
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg" alt="Figma" className="w-8 h-8 hover:scale-110 transition-transform" title="Figma" />
+            </motion.div>
 
             {/* CSS for Blob Animation */}
             <style jsx global>{`
