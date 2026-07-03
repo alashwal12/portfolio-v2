@@ -147,23 +147,24 @@ export function Hero({ profile }: { profile?: any }) {
                             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
                             <span className="text-sm font-bold">Open to Work</span>
                         </motion.div>
-
-                        {/* Tool Logos Row */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.5 }}
-                            className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-4 bg-card/80 backdrop-blur-md px-6 py-3 rounded-full border border-border shadow-xl w-max z-10"
-                        >
-                            <img src="https://cdn.simpleicons.org/powerbi/F2C811" alt="Power BI" className="w-8 h-8 hover:scale-110 transition-transform" />
-                            <img src="https://cdn.simpleicons.org/tableau/E97627" alt="Tableau" className="w-8 h-8 hover:scale-110 transition-transform" />
-                            <img src="https://cdn.simpleicons.org/python/3776AB" alt="Python" className="w-8 h-8 hover:scale-110 transition-transform" />
-                            <img src="https://cdn.simpleicons.org/mysql/4479A1" alt="SQL" className="w-8 h-8 hover:scale-110 transition-transform" />
-                            <img src="https://cdn.simpleicons.org/microsoftexcel/217346" alt="Excel" className="w-8 h-8 hover:scale-110 transition-transform" />
-                        </motion.div>
                     </div>
                 </motion.div>
             </div>
+
+            {/* Tool Logos Row - Bottom Middle of Hero */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center justify-center gap-6 bg-card/80 backdrop-blur-md px-8 py-4 rounded-full border border-border shadow-xl z-10"
+            >
+                {/* Use jsdelivr simple-icons for reliability */}
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/powerbi.svg" alt="Power BI" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(76%) sepia(55%) saturate(3786%) hue-rotate(345deg) brightness(101%) contrast(98%)' }} title="Power BI" />
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tableau.svg" alt="Tableau" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(47%) sepia(86%) saturate(1914%) hue-rotate(349deg) brightness(97%) contrast(92%)' }} title="Tableau" />
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/python.svg" alt="Python" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(37%) sepia(48%) saturate(1472%) hue-rotate(185deg) brightness(97%) contrast(89%)' }} title="Python" />
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/mysql.svg" alt="SQL" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(41%) sepia(50%) saturate(1148%) hue-rotate(172deg) brightness(93%) contrast(87%)' }} title="SQL" />
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/microsoftexcel.svg" alt="Excel" className="w-8 h-8 hover:scale-110 transition-transform" style={{ filter: 'invert(33%) sepia(90%) saturate(1210%) hue-rotate(120deg) brightness(94%) contrast(95%)' }} title="Excel" />
+            </motion.div>
 
             {/* CSS for Blob Animation */}
             <style jsx global>{`
