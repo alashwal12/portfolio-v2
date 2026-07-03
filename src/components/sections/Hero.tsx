@@ -147,6 +147,20 @@ export function Hero({ profile }: { profile?: any }) {
                             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
                             <span className="text-sm font-bold">Open to Work</span>
                         </motion.div>
+
+                        {/* Tool Logos Row */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.5 }}
+                            className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-4 bg-card/80 backdrop-blur-md px-6 py-3 rounded-full border border-border shadow-xl w-max z-10"
+                        >
+                            <img src="https://cdn.simpleicons.org/powerbi/F2C811" alt="Power BI" className="w-8 h-8 hover:scale-110 transition-transform" />
+                            <img src="https://cdn.simpleicons.org/tableau/E97627" alt="Tableau" className="w-8 h-8 hover:scale-110 transition-transform" />
+                            <img src="https://cdn.simpleicons.org/python/3776AB" alt="Python" className="w-8 h-8 hover:scale-110 transition-transform" />
+                            <img src="https://cdn.simpleicons.org/mysql/4479A1" alt="SQL" className="w-8 h-8 hover:scale-110 transition-transform" />
+                            <img src="https://cdn.simpleicons.org/microsoftexcel/217346" alt="Excel" className="w-8 h-8 hover:scale-110 transition-transform" />
+                        </motion.div>
                     </div>
                 </motion.div>
             </div>

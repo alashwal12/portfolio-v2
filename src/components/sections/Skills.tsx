@@ -38,9 +38,16 @@ export function Skills({ skills: dbSkills }: { skills?: any[] }) {
             return acc;
         }, {});
 
+        const iconMap: Record<string, any> = {
+            "Data Analysis": <Brain className="w-6 h-6 text-accent" />,
+            "BI & Visualization": <LayoutDashboard className="w-6 h-6 text-accent" />,
+            "Data Handling": <Database className="w-6 h-6 text-accent" />,
+            "Soft Skills": <Users className="w-6 h-6 text-accent" />,
+        };
+
         skillCategories = Object.keys(grouped).map((cat) => ({
             title: cat,
-            icon: <Terminal className="w-6 h-6 text-accent" />, // Default icon for dynamic categories
+            icon: iconMap[cat] || <Activity className="w-6 h-6 text-accent" />, // Fallback to Activity icon instead of Terminal
             skills: grouped[cat]
         }));
     }
