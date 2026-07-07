@@ -30,11 +30,12 @@ export default async function EditSkillPage({ params }: { params: Promise<{ id: 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
         <form action={updateSkillWithId} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Skill Name *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Skill Name * (Comma separated)</label>
             <input 
               required 
               type="text" 
               name="name" 
+              placeholder="e.g. Figma, User Testing"
               defaultValue={skill.name}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" 
             />
