@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { createSkill, deleteSkill } from "./actions";
-import { Trash2 } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
+import Link from "next/link";
 
 export default async function SkillsPage() {
   const skills = await db.skill.findMany({
@@ -67,14 +68,22 @@ export default async function SkillsPage() {
                         {skill.proficiency ? `${skill.proficiency}%` : "-"}
                       </td>
                       <td className="p-4 text-right">
-                        <form action={deleteSkill.bind(null, skill.id)} className="inline-block">
-                          <button
-                            type="submit"
-                            className="p-2 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                        <div className="flex items-center justify-end gap-2">
+                          <Link
+                            href={`/admin/skills/${skill.id}`}
+                            className="p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                           >
-                            <Trash2 size={18} />
-                          </button>
-                        </form>
+                            <Pencil size={18} />
+                          </Link>
+                          <form action={deleteSkill.bind(null, skill.id)} className="inline-block">
+                            <button
+                              type="submit"
+                              className="p-2 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </form>
+                        </div>
                       </td>
                     </tr>
                   ))}

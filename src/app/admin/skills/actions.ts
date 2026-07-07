@@ -20,6 +20,25 @@ export async function createSkill(formData: FormData) {
   revalidatePath("/admin/skills");
 }
 
+export async function updateSkill(id: string, formData: FormData) {
+  const name = formData.get("name") as string;
+  const category = formData.get("category") as string;
+  const proficiencyStr = formData.get("proficiency") as string;
+  const proficiency = proficiencyStr ? parseInt(proficiencyStr, 10) : null;
+  
+  await db.skill.update({
+    where: { id },
+    data: {
+      name,
+      category,
+      proficiency: isNaN(proficiency as any) ? null : proficiency,
+    },
+  });
+
+  revalidatePath("/");
+  revalidatePath("/admin/skills");
+}
+
 export async function deleteSkill(id: string) {
   await db.skill.delete({
     where: { id },
