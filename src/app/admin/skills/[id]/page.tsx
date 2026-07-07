@@ -4,9 +4,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
-export default async function EditSkillPage({ params }: { params: { id: string } }) {
+export default async function EditSkillPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  
   const skill = await db.skill.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
 
   if (!skill) {
